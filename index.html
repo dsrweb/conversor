@@ -6,8 +6,9 @@
 <title>Conversor Unidades</title>
 <style>
 html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%;touch-action:manipulation}
+:root{--safe-bottom:env(safe-area-inset-bottom);} 
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Arial,sans-serif}
-body{background:#111;color:#fff;display:flex;flex-direction:column;height:100vh;max-height:100vh;overflow:hidden}
+body{background:#111;color:#fff;display:flex;flex-direction:column;height:100dvh;min-height:100dvh;max-height:100dvh;overflow:hidden;padding-bottom:var(--safe-bottom);} 
 .display{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:8px;text-align:center;padding-top:72px}
 .currentInput{font-size:1.8rem;min-height:2.2rem;margin-bottom:6px}
 .breakdown{font-size:.95rem;line-height:1.3rem;margin-bottom:6px;max-height:16vh;overflow:hidden}
@@ -34,7 +35,7 @@ body{background:#111;color:#fff;display:flex;flex-direction:column;height:100vh;
   letter-spacing:.5px;
 }
 
-.keyboard{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px}
+.keyboard{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px;padding-bottom:calc(8px + var(--safe-bottom));} 
 button{font-size:clamp(.95rem,3.5vw,1rem);padding:clamp(10px,2.8vw,12px);border:none;border-radius:10px;background:#333;color:#fff;touch-action:manipulation}
 button:active{background:#555}
 .actions{grid-column:1/4;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
@@ -70,8 +71,9 @@ button:active{background:#555}
 document.addEventListener('gesturestart', (e)=>e.preventDefault());
 document.addEventListener('gesturechange', (e)=>e.preventDefault());
 document.addEventListener('gestureend', (e)=>e.preventDefault());
-// Evita cualquier desplazamiento (vertical/horizontal)
-document.addEventListener('touchmove', (e)=>e.preventDefault(), {passive:false});
+// Nota: eliminamos el bloqueo global de touchmove porque en iOS
+// puede interferir con el cálculo dinámico de la barra inferior.
+
 
 const prefixes=["k","h","da","","d","c","m"];
 const prefixFactors={k:1000,h:100,da:10,"":1,d:0.1,c:0.01,m:0.001};
